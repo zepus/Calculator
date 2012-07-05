@@ -9,111 +9,97 @@
  * Description of controller
  *
  * @author Zepus
- */
-require_once 'signPress.php';
+ *  */
+
 class controller {
-    //put your code here
+    /**
+     * Initializing all post values with empty sting if they are not set. 
+     */
+    function checkIfPostsAreSet() {
+        if (!isset($_POST['eq'])) $_POST['eq'] = '';
+        if (!isset($_POST['database'])) $_POST['database'] = '';
+        if (!isset($_POST['number'])) $_POST['number'] = '';
+        if (!isset($_POST['currentResult'])) $_POST['currentResult'] = '';
+        if (!isset($_POST['input'])) $_POST['input'] = '';
+        if (!isset($_POST['database'])) $_POST['database'] = '';
+        if (!isset($_POST['currentNumber'])) $_POST['currentNumber'] = '';
+        if (!isset($_POST['oldSign'])) $_POST['oldSign'] = '';
+        if (!isset($_POST['currentSign'])) $_POST['currentSign'] = '';
+        if (!isset($_POST['fullEquation'])) $_POST['fullEquation'] = '';
+    }
 
+    
+    /**
+     * If number button is pressed, input adds last value to number. 
+     */
     public function addNr() {
-        $result = '';
-        $newSignPressed = new signPress();
-        if (isset($_POST['number'])) {
-            if ($newSignPressed->checkIfSignIsTrue($_POST['currentSign'])) {
-                $result = $_POST['number'];
-            }
-            elseif ($_POST['output'] == '0')
-                $result = $_POST['number'];
-            else
-                $result = $_POST['currentNumber'] . $_POST['number'];
-        }
-        elseif (!isset($_POST['output']))
-            $result = '0';
-        elseif ($_POST['output'] == '' or $_POST['output'] == '0')
-            $result = '0';
-        if (isset($_POST['eq']))
-            $result = $_POST['currentNumber'];
-        if (isset($_POST['eq']) and $_POST['eq'] == '=')
-            $result = '';
+        $this->checkIfPostsAreSet();
         
+        $result = '';
+        $newCheckFuncClass = new checkFuncClass();
+        $result = $newCheckFuncClass->checkAndAddNumberIfPressed($_POST['number'], $_POST['currentNumber'], $_POST['currentSign'], $_POST['input'], $_POST['eq']);
         echo $result;
-
     }
     
     
-    
+    /**
+     * If new sign is set and a new number button is pressed,
+     * then the new result becomes the old result computed with the input using oldSign. 
+     */
     public function addRes() {
+        $this->checkIfPostsAreSet();
+      
         $result = '0';
-        $newSignPressed = new signPress();
-        if (isset($_POST['number']))
-            $result = $_POST['currentResult'];
-        elseif (isset($_POST['currentNumber'])) {
-            $result = $newSignPressed->makeEquation($_POST['currentResult'], $_POST['oldSign'], $_POST['currentNumber']);
-        if (isset($_POST['database']))
-            $result = '0';
-        
-        }
-
-//        if (isset($_POST['oldSign']) and $_POST['oldSign'] == '' and isset($_POST['eq']) and $_POST['eq'] == '=')
-//            $result = '';
-
+        $newCheckFuncClass = new checkFuncClass();
+        $result = $newCheckFuncClass->checkAndAddResult($_POST['number'], $_POST['currentNumber'], $_POST['currentResult'],  $_POST['oldSign'], $_POST['database'], $_POST['eq'], $_POST['currentSign']);
         echo $result;
     }
     
     
-    
+    /**
+     * If a sign button is pressed,
+     * then the value of currentSign becomes the value of the button pressed. 
+     */
     public function addSn() {
-        if (isset($_POST['eq']))
-            if ($_POST['eq'] != '=')
-                echo $_POST['eq'];
-            else
-                echo '';
-    }
-    
-    
-    
-    public function addOldSign() {
-        $result = '+';
-        if (isset($_POST['number']) and isset($_POST['currentSign']) and $_POST['currentSign'] != '')
-            $result = $_POST['currentSign'];
-        elseif (isset($_POST['oldSign']) and $_POST['oldSign'] != '')
-            $result = $_POST['oldSign']; 
-        if (!isset($_POST['number']) and !isset($_POST['eq']))
-            $result = '';
-        if (isset($_POST['eq']) and $_POST['eq'] == '=')
-            $result = '';
-
+        $this->checkIfPostsAreSet();
+        $result = '';
+        $newCheckFuncClass = new checkFuncClass();
+        $result = $newCheckFuncClass->checkAndAddSign($_POST['eq']);
         echo $result;
     }
     
     
-    
-    public function addEq() {
-        $result = '';
-        if (isset($_POST['number']))
-           $result = $_POST['fullEquation'] . $_POST['number'];
-        elseif (isset($_POST['eq'])) {
-            $str = $_POST['fullEquation'];
-            if ($_POST['fullEquation'] != '') {
-                $lastValue = $str[strlen($str)-1];
-                if (in_array($lastValue, array("/", "*", "+", "-", "="))) {       
-                    $str = substr($str, 0, -1);
-                }
-            }
-            $result = $str . $_POST['eq'];
-        }
+    /**
+     * If a number button is pressed and currentSign has a sign,
+     * then oldSign becomes currentSign.
+     */
+    public function addOldSign() {
+        $this->checkIfPostsAreSet();
         
-        if ($result != '')
-            if ($result[strlen($result)-1] == "=")
-                $result = substr($result, 0, -1);
-            
-        //////////////////////
-            ////////////////////   ADD TO DATABASE IN <<IF>>
-//        if (isset($_POST['oldSign']) and $_POST['oldSign'] == '' and isset($_POST['eq']) and $_POST['eq'] == '=')
-//            $result = ''; 
+        $result = '';
+        $newCheckFuncClass = new checkFuncClass();
+        $result = $newCheckFuncClass->checkAndAddOldSign( $_POST['number'], $_POST['currentSign'], $_POST['oldSign'], $_POST['eq']);
+        echo $result;
+    }
+    
+    
+    /**
+     * Every time a sign or number button is pressed(except for '='),
+     * that value is entered to the fullEquation string.
+     */
+    public function addEq() {
+        $this->checkIfPostsAreSet();
+        
+        $result = '';
+        $newCheckFuncClass = new checkFuncClass();
+        $result = $newCheckFuncClass->chackAndAddValuesToEquation($_POST['number'], $_POST['fullEquation'], $_POST['eq'], $_POST['currentSign'], $_POST['input']);
         echo $result;
     }
 }
+
+
 $newController = new controller();
+require_once 'checkFuncClass.php';
 require_once 'view.php';
 
 

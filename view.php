@@ -12,7 +12,7 @@ and open the template in the editor.
         <form name="submitForm" action="controller.php" method="post">
             
             Result: <input type="text" name="currentResult" value="<?php $newController->addRes(); ?>" style="height: 50px; width: 161px; font-size:25px" /><br/>
-            Input:  <input type="text" name="output" value="<?php $newController->addNr(); $newController->addSn(); ?>" size="10" style="height: 40px; width: 114px; font-size:20px;" />
+            Input:  <input type="text" name="input" value="<?php $newController->addNr(); $newController->addSn(); ?>" size="10" style="height: 40px; width: 114px; font-size:20px;" />
             <input type="submit" name="eq" value="=" style="height: 50px; width: 50px; font-size:25px" /><br/>
 
             <button type="submit" name="number" value="7" style="height: 50px; width: 50px; font-size:25px">7</button>
@@ -36,10 +36,10 @@ and open the template in the editor.
             <button type="submit" name="eq" value="+" style="height: 50px; width: 50px; font-size:25px">+</button>
             <button type="submit" name="database" value="showDatabase" style="height: 50px; width: 220px; font-size:25px">Show Database</button><br/>
             
-            <br/><input type="text" name="currentNumber" value="<?php $newController->addNr(); ?>" style="height: 50px; width: 500px; font-size:25px" />
-            <br/><input type="text" name="oldSign" value="<?php $newController->addOldSign(); ?>" style="height: 50px; width: 500px; font-size:25px" />
-            <br/><input type="text" name="currentSign" value="<?php $newController->addSn(); ?>" style="height: 50px; width: 500px; font-size:25px" />
-            <br/><input type="text" name="fullEquation" value="<?php $newController->addEq(); ?>" style="height: 50px; width: 500px; font-size:25px" />
+            <br/><input type="hidden" name="currentNumber" value="<?php $newController->addNr(); ?>" style="height: 50px; width: 500px; font-size:25px" />
+            <br/><input type="hidden" name="oldSign" value="<?php $newController->addOldSign(); ?>" style="height: 50px; width: 500px; font-size:25px" />
+            <br/><input type="hidden" name="currentSign" value="<?php $newController->addSn(); ?>" style="height: 50px; width: 500px; font-size:25px" />
+            <br/><input type="hidden" name="fullEquation" value="<?php $newController->addEq(); ?>" style="height: 50px; width: 500px; font-size:25px" />
         </form>
 
     </body>
